@@ -29,7 +29,7 @@ int main()
 	int people;
 	getTitles();		// Get titles from text file. MUST be first line
 	showtitle();
-
+	LoadSeats();
 	cout << "[A/D] Movie Selection" << endl;
 	cout << "[0] Movie Selection Editor" << endl;
 	cout << "[Esc] Close the Programme" << endl;
@@ -60,7 +60,6 @@ int main()
 	default:
 		cout << "\nInvalid Choice!";
 		cout << "\nPress any key...";
-		(void)_getch();
 	}
 	return 0;
 }
@@ -247,8 +246,6 @@ void LoadSeats()		// Ryzal
 
 	fin.close();
 }
-
-
 
 void SaveSeats()
 {
