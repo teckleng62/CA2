@@ -5,25 +5,63 @@
 #include <conio.h>
 #include <vector>
 using namespace std;
+// TL
 void showtitle();
 void getTitles();
 void addTitle();
+void Title();
 int titleCount = 0;
 vector<string> titles;
-bool Title();
+// Ryzal
+const int ROWS = 8;
+const int COLS = 20;
+char seats[ROWS][COLS];
+void LoadSeats();
+void SaveSeats();
+void DisplaySeats();
+int BookSeat();
+//
+
 
 int main()
 {
+	int choice = 0;
+	int people;
+	getTitles();		// Get titles from text file. MUST be first line
 	showtitle();
+
 	cout << "[A/D] Movie Selection" << endl;
 	cout << "[0] Movie Selection Editor" << endl;
 	cout << "[Esc] Close the Programme" << endl;
-	getTitles();		// Get titles from text file. MUST be first line
+	
 	char key = _getch();
 	if (key == '0') { addTitle(); }		// add title
-	else if (key == 'd' || key == 'a') { Title(); }
 	else if (key == 27) { return 0; }
+	else if (key == 'd' || key == 'a') { Title(); }
 
+	cout << "=====================================\n";
+	cout << "1. Book a Seat\n";
+	cout << "2. Exit\n";
+	cout << "=====================================\n";
+	cout << "Enter Choice: ";
+	cin >> choice;
+
+	switch (choice)
+	{
+	case 1:
+		people = BookSeat();
+		break; //Receipt part.
+
+	case 2:
+		SaveSeats();
+		cout << "\nThank you!\n";
+		break;
+
+	default:
+		cout << "\nInvalid Choice!";
+		cout << "\nPress any key...";
+		(void)_getch();
+	}
 	return 0;
 }
 
@@ -98,6 +136,23 @@ void addTitle()		// REMOVE TITLE
 }
 */
 
+void showtitle()
+{
+	fstream title;
+	string line;
+	title.open("Image.txt");
+	if (!title.is_open())
+	{
+		cout << "Unable to open file." << endl;
+	}
+
+	while (getline(title, line))
+	{
+		cout << line << endl;
+	}
+	cout << "\n\n";
+}
+
 void addTitle()
 {
 	system("cls");
@@ -122,7 +177,7 @@ void addTitle()
 	title.close();
 }
 
-bool Title()
+void Title()
 {
 	int x = 0;
 	char key;
@@ -158,7 +213,7 @@ bool Title()
 		}
 		else if (key == ' ')			// if 'Space' is pressed, go in to the seat selection
 		{
-			cout << "\n\nseats" << endl;
+			DisplaySeats();
 			break;
 		}
 		else if (key == 27)			// if 'Esc' is pressed, Exit
@@ -168,21 +223,149 @@ bool Title()
 		}
 		system("cls");
 	}
-	return 0;
 }
-void showtitle()
+
+
+
+void LoadSeats()		// Ryzal
 {
-	fstream title;
-	string line;
-	title.open("Image.txt");
-	if (!title.is_open())
+	ifstream fin("Seats.txt");
+
+	if (fin.fail())
 	{
-		cout << "Unable to open file." << endl;
+		cout << "Unable to open file!";
+		exit(1);
 	}
 
-	while (getline(title, line))
+	for (int i = 0; i < ROWS; i++)
 	{
-		cout << line << endl;
+		for (int j = 0; j < COLS; j++)
+		{
+			fin >> seats[i][j];
+		}
 	}
-	cout << "\n\n";
+
+	fin.close();
+}
+
+
+
+void SaveSeats()
+{
+	ofstream fout("Seats.txt");
+
+	for (int i = 0; i < ROWS; i++)
+	{
+		for (int j = 0; j < COLS; j++)
+		{
+			fout << seats[i][j] << " ";
+		}
+
+		fout << endl;
+	}
+
+	fout.close();
+}
+
+void DisplaySeats()
+{
+	int border = 45;
+	cout << "\n" << endl;
+	for (int z = 0; z < border; z++) { cout << "="; } cout << endl;
+	cout << "\n         MOVIE SEATING SYSTEM\n" << endl;
+	for (int z = 0; z < border; z++) { cout << "="; } cout << endl;
+	cout << "\n                SCREEN\n" << endl;
+	for (int z = 0; z < border; z++) { cout << "="; } cout << endl;
+
+	// Print seat numbers
+	cout << "        ";          // 8 spaces
+
+	for (int i = 1; i <= COLS; i++)
+	{
+		cout << setw(2) << i << " ";
+	}
+
+	cout << "\n";
+
+	// Print seats
+	for (int i = 0; i < ROWS; i++)
+	{
+		cout << "Row " << i + 1 << "   ";
+
+		for (int j = 0; j < COLS; j++)
+		{
+			cout << setw(2) << seats[i][j] << " ";
+		}
+
+		cout << endl;
+	}
+
+	cout << "\n";
+	cout << "O = Available\n";
+	cout << "X = Booked\n\n";
+}
+
+int BookSeat()
+{
+	int row, seat, people;
+	bool available = true;
+
+	cout << "\nEnter row (1-8): ";
+	cin >> row;
+
+	cout << "Enter starting seat (1-20): ";
+	cin >> seat;
+
+	cout << "Number of people: ";
+	cin >> people;
+
+	if (row < 1 || row > ROWS)
+	{
+		cout << "Invalid row!";
+		(void)_getch();
+		return 0;
+	}
+
+	if (seat < 1 || seat > COLS)
+	{
+		cout << "Invalid seat!";
+		(void)_getch();
+		return 0;
+	}
+
+	if (seat + people - 1 > COLS)
+	{
+		cout << "Not enough seats in this row!";
+		(void)_getch();
+		return 0;
+	}
+
+	for (int i = 0; i < people; i++)
+	{
+		if (seats[row - 1][seat - 1 + i] == 'X')
+		{
+			available = false;
+			break;
+		}
+	}
+
+	if (!available)
+	{
+		cout << "\nSome seats are already booked!";
+	}
+	else
+	{
+		for (int i = 0; i < people; i++)
+		{
+			seats[row - 1][seat - 1 + i] = 'X';
+		}
+
+		SaveSeats();
+
+		cout << "\nBooking Successful!";
+	}
+
+	cout << "\nPress any key...";
+	(void)_getch();
+	return people;
 }
