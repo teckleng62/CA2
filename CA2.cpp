@@ -26,7 +26,7 @@ int BookSeat();
 int main()
 {
 	int choice = 0;
-	int people;
+	int people=0;
 	getTitles();		// Get titles from text file. MUST be first line
 	showtitle();
 	LoadSeats();
@@ -35,32 +35,12 @@ int main()
 	cout << "[Esc] Close the Programme" << endl;
 	
 	char key = _getch();
-	if (key == '0') { addTitle(); }		// add title
+	if (key == '0') { addTitle(); return 0; }		// add title
 	else if (key == 27) { return 0; }
 	else if (key == 'd' || key == 'a') { Title(); }
-
-	cout << "=====================================\n";
-	cout << "1. Book a Seat\n";
-	cout << "2. Exit\n";
-	cout << "=====================================\n";
-	cout << "Enter Choice: ";
-	cin >> choice;
-
-	switch (choice)
-	{
-	case 1:
-		people = BookSeat();
-		break; //Receipt part.
-
-	case 2:
-		SaveSeats();
-		cout << "\nThank you!\n";
-		break;
-
-	default:
-		cout << "\nInvalid Choice!";
-		cout << "\nPress any key...";
-	}
+	people = BookSeat();
+	if (people == 0) { return 0; }
+	else
 	return 0;
 }
 
@@ -155,15 +135,16 @@ void showtitle()
 void addTitle()
 {
 	system("cls");
+	fstream titleout;
 	ofstream title;
 	string titlename;
 	title.open("Titles.txt", ofstream::app);		// open text file. append/edit.
-	if (!title.is_open())
+	if (!title.is_open() )
 	{
 		cout << "Unable to open file." << endl;
 	}
-
-	cout << "[Space] Edit the movies." << endl;
+	cout << "[Space] Add a new movie title." << endl;
+	cout << "[Esc] Go back to Main Menu" << endl;
 	char key = _getch();
 	if (key == ' ')
 	{
@@ -172,6 +153,17 @@ void addTitle()
 		cout << "Type the title of the movie: " << endl;
 		cin >> titlename;
 		title << endl << titlename;
+	}
+	else if (key == 27) { main(); }
+	titleout.open("Titles.txt");
+	if (!titleout.is_open())
+	{
+		cout << "Unable to open file." << endl;
+	}
+	cout << endl;
+	while (getline(titleout, titlename))
+	{
+		cout << titlename << endl;
 	}
 	title.close();
 }
@@ -217,7 +209,8 @@ void Title()
 		}
 		else if (key == 27)			// if 'Esc' is pressed, Exit
 		{
-			cout << "\n\nescape" << endl;
+			cout << "\nHave a nice day!" << endl;
+			exit(0);
 			break;
 		}
 		system("cls");
@@ -266,12 +259,10 @@ void SaveSeats()
 
 void DisplaySeats()
 {
-	int border = 45;
+	int border = 67;
 	cout << "\n" << endl;
 	for (int z = 0; z < border; z++) { cout << "="; } cout << endl;
-	cout << "\n         MOVIE SEATING SYSTEM\n" << endl;
-	for (int z = 0; z < border; z++) { cout << "="; } cout << endl;
-	cout << "\n                SCREEN\n" << endl;
+	cout << "\n\t\t\t\tSCREEN\n" << endl;
 	for (int z = 0; z < border; z++) { cout << "="; } cout << endl;
 
 	// Print seat numbers
@@ -362,7 +353,5 @@ int BookSeat()
 		cout << "\nBooking Successful!";
 	}
 
-	cout << "\nPress any key...";
-	(void)_getch();
 	return people;
 }
