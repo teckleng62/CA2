@@ -12,6 +12,7 @@ void addTitle();
 void Title();
 int titleCount = 0;
 vector<string> titles;
+string selectedtitle;
 // Ryzal
 const int ROWS = 8;
 const int COLS = 20;
@@ -37,10 +38,13 @@ int main()
 	char key = _getch();
 	if (key == '0') { addTitle(); return 0; }		// add title
 	else if (key == 27) { return 0; }
-	else if (key == 'd' || key == 'a') { Title(); }
-	people = BookSeat();
-	if (people == 0) { return 0; }
-	else
+	else if (key == 'd' || key == 'a') { Title(); }	// get selectedtitle <- title;
+	people = BookSeat();							// get people <- bookseat;
+	if (people <= 0) { return 0; }
+	else	//show checkout page
+	{
+			
+	}
 	return 0;
 }
 
@@ -214,6 +218,7 @@ void Title()
 			break;
 		}
 		system("cls");
+		selectedtitle = titles[x];
 	}
 }
 
