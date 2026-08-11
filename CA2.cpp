@@ -21,13 +21,19 @@ void LoadSeats();
 void SaveSeats();
 void DisplaySeats();
 int BookSeat();
-//
+// Iskandar
+void checkout(string movie, int adultTickets, int childTickets);
+// Irfan
+void cashReceipt(string movie, int adultTickets, int childTickets, double total);
+void paywaveReceipt(string movie, int adultTickets, int childTickets, double total);
 
 
 int main()
 {
 	int choice = 0;
 	int people=0;
+	int adultTickets;
+	int childTickets;
 	getTitles();		// Get titles from text file. MUST be first line
 	showtitle();
 	LoadSeats();
@@ -35,16 +41,52 @@ int main()
 	cout << "[0] Movie Selection Editor" << endl;
 	cout << "[Esc] Close the Programme" << endl;
 	
+
 	char key = _getch();
 	if (key == '0') { addTitle(); return 0; }		// add title
 	else if (key == 27) { return 0; }
 	else if (key == 'd' || key == 'a') { Title(); }	// get selectedtitle <- title;
-	people = BookSeat();							// get people <- bookseat;
-	if (people <= 0) { return 0; }
-	else	//show checkout page
+	do {
+		people = BookSeat();  // get people <- bookseat;
+		if (people <= 0) {
+			cout << "\nWould you like to try again? (Y/N): ";
+			char tryAgain;
+			cin >> tryAgain;
+			if (tryAgain == 'N' || tryAgain == 'n') {
+				return 0;
+			}
+			system("cls");
+			DisplaySeats();  // Show updated seat map
+		}
+	} while (people <= 0);
+	
+	cout << "\n=====================================\n";
+	cout << "          TICKET SELECTION\n";
+	cout << "=====================================\n";
+	
+	cout << "Number of adult tickets: ";
+	cin >> adultTickets;
+
+	cout << "Number of child tickets: ";
+	cin >> childTickets;
+
+
+	// Make sure adult + child tickets
+	// match the number of seats booked
+	while (adultTickets + childTickets != people)
 	{
-			
+		cout << "\nThe number of adult and child tickets";
+		cout << " must equal " << people << ".\n";
+		cout << "Please try again.\n\n";
+		cout << "Number of adult tickets: ";
+		cin >> adultTickets;
+
+		cout << "Number of child tickets: ";
+		cin >> childTickets;
 	}
+		// Send the information to checkout
+		checkout(selectedtitle, adultTickets, childTickets);
+
 	return 0;
 }
 
@@ -345,6 +387,7 @@ int BookSeat()
 	if (!available)
 	{
 		cout << "\nSome seats are already booked!";
+		return 0;
 	}
 	else
 	{
@@ -356,7 +399,171 @@ int BookSeat()
 		SaveSeats();
 
 		cout << "\nBooking Successful!";
+		(void)_getch();
+		return people;
+	}
+}
+
+
+// Iskandar
+void checkout(string movie, int adultTickets, int childTickets)
+{
+	double adultPrice = 12.00;
+	double childPrice = 10.00;
+
+	int numberOfTickets = adultTickets + childTickets;
+
+	double total = (adultTickets * adultPrice) +
+		(childTickets * childPrice);
+
+	int paymentMethod;
+	char confirm;
+
+
+	// DISPLAY CHECKOUT
+	cout << "\n";
+	cout << "=====================================\n";
+	cout << "              CHECKOUT\n";
+	cout << "=====================================\n";
+
+	cout << fixed << setprecision(2);
+
+	cout << "Movie             : " << movie << endl;
+	cout << "Adult tickets     : " << adultTickets << endl;
+	cout << "Child tickets     : " << childTickets << endl;
+	cout << "Total tickets     : " << numberOfTickets << endl;
+	cout << "Adult price       : $" << adultPrice << endl;
+	cout << "Child price       : $" << childPrice << endl;
+	cout << "Total             : $" << total << endl;
+
+	cout << "=====================================\n";
+
+
+	// CONFIRM BOOKING
+	cout << "\nConfirm your selection? (Y/N): ";
+	cin >> confirm;
+
+
+	// Invalid input
+	while (confirm != 'Y' && confirm != 'y' &&
+		confirm != 'N' && confirm != 'n')
+	{
+		cout << "\nInvalid choice.\n";
+		cout << "Please enter Y or N.\n";
+
+		cout << "\nConfirm your selection? (Y/N): ";
+		cin >> confirm;
 	}
 
-	return people;
+
+	// Output = N
+	if (confirm == 'N' || confirm == 'n')
+	{
+		cout << "\nBooking cancelled.\n";
+		return;
+	}
+
+
+	// Output = Y
+	cout << "\nBooking confirmed!\n";
+
+
+	// PAYMENT METHOD
+	paymentMethod = 0;
+
+	while (paymentMethod != 1 && paymentMethod != 2)
+	{
+		cout << "\nPayment Method\n";
+		cout << "1. Cash\n";
+		cout << "2. PayWave\n";
+		cout << "Enter your choice: ";
+		cin >> paymentMethod;
+
+		if (paymentMethod != 1 && paymentMethod != 2)
+		{
+			cout << "\nInvalid payment method.\n";
+			cout << "Please try again.\n";
+		}
+	}
+
+
+	// CASH PAYMENT
+	if (paymentMethod == 1)
+	{
+		cout << "\nPayment Method: Cash\n";
+		cout << "Please pay at the counter.\n";
+		cout << "Present your booking receipt at the counter.\n";
+
+		cout << "\nBooking successfully created.\n";
+		cout << "Please proceed to the counter for payment.\n";
+
+		// IRFAN CODE
+		cashReceipt(movie, adultTickets, childTickets, total);
+	}
+
+
+	// PAYWAVE PAYMENT
+	else if (paymentMethod == 2)
+	{
+		cout << "\nPayment Method: PayWave\n";
+		cout << "Please tap your card/device...\n";
+
+		cout << "\nPayment received successfully!\n";
+
+		// IRFAN CODE
+		paywaveReceipt(movie, adultTickets, childTickets, total);
+	}
+
+}
+
+
+// Irfan
+void cashReceipt(string movie, int adultTickets, int childTickets, double total)
+{
+	cout << "\n";
+	cout << "=====================================\n";
+	cout << "           CASH RECEIPT\n";
+	cout << "=====================================\n";
+
+	cout << fixed << setprecision(2);
+
+	cout << "Movie             : " << movie << endl;
+	cout << "Adult tickets     : " << adultTickets << endl;
+	cout << "Child tickets     : " << childTickets << endl;
+	cout << "Total tickets     : "
+		<< adultTickets + childTickets << endl;
+	cout << "Total             : $" << total << endl;
+
+	cout << "Payment Method    : Cash" << endl;
+	cout << "Payment Status    : Pay at counter" << endl;
+
+	cout << "=====================================\n";
+	cout << "   Thank you for your booking! 67:)\n";
+	cout << "=====================================\n";
+}
+
+
+// PAYWAVE RECEIPT FUNCTION
+void paywaveReceipt(string movie, int adultTickets, int childTickets, double total)
+{
+	cout << "\n";
+	cout << "=====================================\n";
+	cout << "         PAYWAVE RECEIPT\n";
+	cout << "=====================================\n";
+
+	cout << fixed << setprecision(2);
+
+	cout << "Movie             : " << movie << endl;
+	cout << "Adult tickets     : " << adultTickets << endl;
+	cout << "Child tickets     : " << childTickets << endl;
+	cout << "Total tickets     : "
+		<< adultTickets + childTickets << endl;
+	cout << "Total             : $" << total << endl;
+
+	cout << "Payment Method    : PayWave" << endl;
+	cout << "Payment Status    : Payment received" << endl;
+
+	cout << "=====================================\n";
+	cout << "   Thank you for your booking! 67:)\n";
+	cout << "=====================================\n";
 }
