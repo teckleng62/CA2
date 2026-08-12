@@ -404,7 +404,6 @@ int BookSeat()
 		SaveSeats();
 
 		cout << "\nBooking Successful!";
-		(void)_getch();
 		return people;
 	}
 }
