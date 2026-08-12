@@ -5,6 +5,7 @@
 #include <conio.h>
 #include <vector>
 using namespace std;
+
 // TL
 void showtitle();
 void getTitles();
@@ -13,6 +14,7 @@ void Title();
 int titleCount = 0;
 vector<string> titles;
 string selectedtitle;
+
 // Ryzal
 const int ROWS = 8;
 const int COLS = 20;
@@ -22,8 +24,10 @@ void SaveSeats();
 void DisplaySeats();
 int BookSeat();
 int selectedrow, selectedseat;
+
 // Iskandar
 void checkout(string movie, int adultTickets, int childTickets);
+
 // Irfan
 void cashReceipt(string movie, int adultTickets, int childTickets, double total);
 void paywaveReceipt(string movie, int adultTickets, int childTickets, double total);
