@@ -26,8 +26,13 @@
     <Text Include="Titles.txt">
       <Filter>Source Files</Filter>
     </Text>
-    <Text Include="seats.txt" />
     <Text Include="Receipt.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="template.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+    <Text Include="seats.txt">
       <Filter>Source Files</Filter>
     </Text>
   </ItemGroup>

@@ -2,11 +2,11 @@
 =====================================
          PAYWAVE RECEIPT
 =====================================
-Movie             : 
+Movie             : Demon Slayer
 Adult tickets     : 2
-Child tickets     : 2
-Total tickets     : 4
-Total             : $44.00
+Child tickets     : 5
+Total tickets     : 7
+Total             : $74.00
 Payment Method    : PayWave
 Payment Status    : Payment received
 =====================================

@@ -23,6 +23,7 @@ void LoadSeats();
 void SaveSeats();
 void DisplaySeats();
 int BookSeat();
+void ResetSeats();
 int selectedrow, selectedseat;
 
 // Iskandar
@@ -40,20 +41,20 @@ int main()
 	int adultTickets;
 	int childTickets;
 	getTitles();		// Get titles from text file. MUST be first line
-	showtitle();
+	showtitle();	
 	LoadSeats();
 	cout << "[A/D] Movie Selection" << endl;
 	cout << "[0] Movie Selection Editor" << endl;
 	cout << "[Esc] Close the Programme" << endl;
 	
-
 	char key = _getch();
 	if (key == '0') { addTitle(); return 0; }		// add title
 	else if (key == 27) { return 0; }
 	else if (key == 'd' || key == 'a') { Title(); }	// get selectedtitle <- title;
-	do {
+	while (people <= 0)
 		people = BookSeat();  // get people <- bookseat;
-		if (people <= 0) {
+		if (people <= 0) 
+		{
 			cout << "\nWould you like to try again? (Y/N): ";
 			char tryAgain;
 			cin >> tryAgain;
@@ -63,18 +64,23 @@ int main()
 			system("cls");
 			DisplaySeats();  // Show updated seat map
 		}
-	} while (people <= 0);
 	
+		system("cls");
 	cout << "\n=====================================\n";
 	cout << "          TICKET SELECTION\n";
 	cout << "=====================================\n";
 	
-	cout << "Number of adult tickets: ";
+	cout << "Amount of Tickets in Total: " << people << endl;
+	cout << "Number of Adult tickets: ";
 	cin >> adultTickets;
-
-	cout << "Number of child tickets: ";
-	cin >> childTickets;
-
+	if (adultTickets != people)
+	{
+		cout << "Number of Child tickets: ";
+		cin >> childTickets;
+	}
+	else 
+	childTickets = 0;
+	cout << "Number of Child tickets: 0";
 
 	// Make sure adult + child tickets
 	// match the number of seats booked
@@ -95,6 +101,7 @@ int main()
 	return 0;
 }
 
+// TL
 void getTitles()
 {
 	fstream title;
@@ -118,53 +125,6 @@ void getTitles()
 		title.close();
 	}										
 }
-/*
-void addTitle()		// REMOVE TITLE
-{
-	system("cls");
-	ofstream title, remove;
-	string titlename;
-	int getline = 1, removeline;
-	title.open("Titles.txt",ofstream::app);		// open text file. append.
-	remove.open("Titles.txt");
-	if (!title.is_open() || !remove.is_open())
-	{
-		cout << "Unable to open file." << endl;
-	}
-
-	cout << "[1] Edit the movies." << endl;
-	cout << "[2] Add more movies." << endl;
-	char key = _getch();
-
-	if (key == '1') 	// remove selected movies
-	{
-		for (int x = 0; x < titleCount; x++)
-		{
-			cout << x << ". " << titles[x] << endl;
-		}
-		cout << "Enter the number of the title you want to remove: ";
-		cin >> removeline;		// get the line to remove
-
-		for (int i = 0; i < titleCount; i++)
-		{
-			if (i != removeline)
-			{
-				remove << titles[i] << endl;
-			}
-			remove.close();
-		}
-	}
-
-	else if (key == '2')
-	{
-		system("cls");
-
-		cout << "Type the title of the movie: " << endl;
-		cin >> titlename;
-		title << endl << titlename;
-	}
-}
-*/
 
 void showtitle()
 {
@@ -195,6 +155,7 @@ void addTitle()
 		cout << "Unable to open file." << endl;
 	}
 	cout << "[Space] Add a new movie title." << endl;
+	cout << "[R] Reset seats." << endl;
 	cout << "[Esc] Go back to Main Menu" << endl;
 	char key = _getch();
 	if (key == ' ')
@@ -205,7 +166,16 @@ void addTitle()
 		cin >> titlename;
 		title << endl << titlename;
 	}
-	else if (key == 27) { main(); }
+	else if (key == 'r')
+	{
+		ResetSeats();
+		cout << endl;
+		system("pause");
+		system("cls");
+		main();
+	}
+	else if (key == 27) { system("cls"); main(); }
+	title.close();
 	titleout.open("Titles.txt");
 	if (!titleout.is_open())
 	{
@@ -216,7 +186,7 @@ void addTitle()
 	{
 		cout << titlename << endl;
 	}
-	title.close();
+	titleout.close();
 }
 
 void Title()
@@ -241,8 +211,6 @@ void Title()
 		for (int z = 0; z < border; z++) { cout << "="; } cout << endl;
 		int space1 = 26, space2 = 8;
 		cout << left << setw(space2) << " " << setw(space1) << "[A / D] to Browse" << setw(space2) << "|" << setw(space1) << "[Space] to Select" << setw(space2) << "|" << "[Esc] to Quit" << endl;
-
-		// show seating for each movie.
 
 		key = _getch();
 		if (key == 'd' && x < titleCount - 1)
@@ -269,7 +237,7 @@ void Title()
 	}
 }
 
-
+// Ryzal
 
 void LoadSeats()		// Ryzal
 {
@@ -408,6 +376,24 @@ int BookSeat()
 	}
 }
 
+void ResetSeats()
+{
+	fstream templatefile, seating;
+	string line;
+	seating.open("seats.txt");
+	templatefile.open("template.txt");
+	if (!seating.is_open() || !templatefile.is_open())
+	{
+		cout << "Unable to open file." << endl;
+	}
+	while (getline(templatefile, line))
+	{
+		seating << line << endl;
+	}
+	templatefile.close();
+	seating.close();
+	cout << "\n\nSeats have been resetted succesfully!" << endl;
+}
 
 // Iskandar
 void checkout(string movie, int adultTickets, int childTickets)

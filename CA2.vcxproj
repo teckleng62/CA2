@@ -129,6 +129,7 @@
     <Text Include="Image.txt" />
     <Text Include="Receipt.txt" />
     <Text Include="seats.txt" />
+    <Text Include="template.txt" />
     <Text Include="Titles.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
