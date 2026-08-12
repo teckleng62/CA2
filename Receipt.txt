@@ -1,0 +1,14 @@
+
+=====================================
+         PAYWAVE RECEIPT
+=====================================
+Movie             : 
+Adult tickets     : 2
+Child tickets     : 2
+Total tickets     : 4
+Total             : $44.00
+Payment Method    : PayWave
+Payment Status    : Payment received
+=====================================
+   Thank you for your booking! 67:)
+=====================================

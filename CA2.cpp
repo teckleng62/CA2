@@ -524,6 +524,13 @@ void checkout(string movie, int adultTickets, int childTickets)
 // Irfan
 void cashReceipt(string movie, int adultTickets, int childTickets, double total)
 {
+	fstream receipt;
+	receipt.open("receipt.txt");
+	if (!receipt.is_open())
+	{
+		cout << "Unable to open file." << endl;
+	}
+
 	cout << "\n";
 	cout << "=====================================\n";
 	cout << "           CASH RECEIPT\n";
@@ -544,12 +551,42 @@ void cashReceipt(string movie, int adultTickets, int childTickets, double total)
 	cout << "=====================================\n";
 	cout << "   Thank you for your booking! 67:)\n";
 	cout << "=====================================\n";
+
+	// Receipt txt file output
+	receipt << "\n";
+	receipt << "=====================================\n";
+	receipt << "           CASH RECEIPT\n";
+	receipt << "=====================================\n";
+
+	receipt << fixed << setprecision(2);
+
+	receipt << "Movie             : " << movie << endl;
+	receipt << "Adult tickets     : " << adultTickets << endl;
+	receipt << "Child tickets     : " << childTickets << endl;
+	receipt << "Total tickets     : "
+		<< adultTickets + childTickets << endl;
+	receipt << "Total             : $" << total << endl;
+
+	receipt << "Payment Method    : Cash" << endl;
+	receipt << "Payment Status    : Pay at counter" << endl;
+
+	receipt << "=====================================\n";
+	receipt << "   Thank you for your booking! 67:)\n";
+	receipt << "=====================================\n";
+
 }
 
 
 // PAYWAVE RECEIPT FUNCTION
 void paywaveReceipt(string movie, int adultTickets, int childTickets, double total)
 {
+	fstream receipt;
+	receipt.open("receipt.txt");
+	if (!receipt.is_open())
+	{
+		cout << "Unable to open file." << endl;
+	}
+
 	cout << "\n";
 	cout << "=====================================\n";
 	cout << "         PAYWAVE RECEIPT\n";
@@ -570,4 +607,26 @@ void paywaveReceipt(string movie, int adultTickets, int childTickets, double tot
 	cout << "=====================================\n";
 	cout << "   Thank you for your booking! 67:)\n";
 	cout << "=====================================\n";
+	// Receipt txt file output
+
+	receipt << "\n";
+	receipt << "=====================================\n";
+	receipt << "         PAYWAVE RECEIPT\n";
+	receipt << "=====================================\n";
+
+	receipt << fixed << setprecision(2);
+
+	receipt << "Movie             : " << movie << endl;
+	receipt << "Adult tickets     : " << adultTickets << endl;
+	receipt << "Child tickets     : " << childTickets << endl;
+	receipt << "Total tickets     : "
+		<< adultTickets + childTickets << endl;
+	receipt << "Total             : $" << total << endl;
+
+	receipt << "Payment Method    : PayWave" << endl;
+	receipt << "Payment Status    : Payment received" << endl;
+
+	receipt << "=====================================\n";
+	receipt << "   Thank you for your booking! 67:)\n";
+	receipt << "=====================================\n";
 }

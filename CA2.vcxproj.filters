@@ -26,7 +26,8 @@
     <Text Include="Titles.txt">
       <Filter>Source Files</Filter>
     </Text>
-    <Text Include="..\..\..\Downloads\seats.txt">
+    <Text Include="seats.txt" />
+    <Text Include="Receipt.txt">
       <Filter>Source Files</Filter>
     </Text>
   </ItemGroup>
