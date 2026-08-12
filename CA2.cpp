@@ -21,6 +21,7 @@ void LoadSeats();
 void SaveSeats();
 void DisplaySeats();
 int BookSeat();
+int selectedrow, selectedseat;
 // Iskandar
 void checkout(string movie, int adultTickets, int childTickets);
 // Irfan
@@ -342,33 +343,33 @@ void DisplaySeats()
 
 int BookSeat()
 {
-	int row, seat, people;
+	int people;
 	bool available = true;
 
 	cout << "\nEnter row (1-8): ";
-	cin >> row;
+	cin >> selectedrow;
 
 	cout << "Enter starting seat (1-20): ";
-	cin >> seat;
+	cin >> selectedseat;
 
 	cout << "Number of people: ";
 	cin >> people;
 
-	if (row < 1 || row > ROWS)
+	if (selectedrow  < 1 || selectedrow  > ROWS)
 	{
 		cout << "Invalid row!";
 		(void)_getch();
 		return 0;
 	}
 
-	if (seat < 1 || seat > COLS)
+	if (selectedseat < 1 || selectedseat > COLS)
 	{
 		cout << "Invalid seat!";
 		(void)_getch();
 		return 0;
 	}
 
-	if (seat + people - 1 > COLS)
+	if (selectedseat + people - 1 > COLS)
 	{
 		cout << "Not enough seats in this row!";
 		(void)_getch();
@@ -377,7 +378,7 @@ int BookSeat()
 
 	for (int i = 0; i < people; i++)
 	{
-		if (seats[row - 1][seat - 1 + i] == 'X')
+		if (seats[selectedrow - 1][selectedseat - 1 + i] == 'X')
 		{
 			available = false;
 			break;
@@ -393,7 +394,7 @@ int BookSeat()
 	{
 		for (int i = 0; i < people; i++)
 		{
-			seats[row - 1][seat - 1 + i] = 'X';
+			seats[selectedrow - 1][selectedseat - 1 + i] = 'X';
 		}
 
 		SaveSeats();
